@@ -30,7 +30,7 @@ cd NEMOGCM/CONFIG
 ### Input necessary files :
 Input files necessary for ORCA2_SAS_LIM3 are:
 
-[INPUTS_SAS_v3.5.tar](prodn.idris.fr/thredds/catalog/ipsl_public/romr005/Online_forcing_archives/catalog.html?dataset=DatasetScanipsl_public/romr005/Online_forcing_archives/INPUTS_SAS_v3.5.tar)
+[INPUTS_SAS_v3.5.tar](https://prodn.idris.fr/thredds/catalog/ipsl_public/romr005/Online_forcing_archives/catalog.html/INPUTS_SAS_v3.5.tar)
 
 and 
 
