@@ -34,4 +34,4 @@ Input files necessary for ORCA2_SAS_LIM3 are:
 
 and 
 
-[ORCA2_LIM_nemo_v3.7.tar](prodn.idris.fr/thredds/catalog/ipsl_public/romr005/Online_forcing_archives/catalog.html?dataset=DatasetScanipsl_public/romr005/Online_forcing_archives/ORCA2_LIM_nemo_v3.7.tar)
+[ORCA2_LIM_nemo_v3.7.tar](http://prodn.idris.fr/thredds/catalog/ipsl_public/romr005/Online_forcing_archives/catalog.html?dataset=DatasetScanipsl_public/romr005/Online_forcing_archives/ORCA2_LIM_nemo_v3.6.tar)
