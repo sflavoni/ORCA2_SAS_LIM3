@@ -1,37 +1,100 @@
-# How to use ORCA2_SAS_LIM3 configuration
+# ORCA2\_SAS\_LIM3
 
-This is a README for NEMO users. You need to have an account on NEMO web site: .....
+ORCA2\_SAS\_LIM is a demonstrator of the SAS ( Stand-alone Surface module ) based on ORCA2_LIM configuration. It runs only the sea ice module but needs the ocean code to initalize the domain, scale factors etc.
 
-### Extract XIOS library via svn :
-You need to extract XIOS library (to manage inputs and outputs files for NEMO code):
-svn co ​http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk xios-2.0
+### Download and compile XIOS library (inputs and outputs for NEMO)  
+Documentation: <https://forge.ipsl.jussieu.fr/ioserver/wiki/documentation>  
 
-### Compile XIOS library :
-You need to compile XIOS (see here documentation https://forge.ipsl.jussieu.fr/ioserver/wiki/documentation)
+~~~sh
+mkdir XIOS  
+svn co ​http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS  
 
-example on CURIE french machine:   
-./make_xios --arch X64\_CURIE
+cd XIOS  
+./make_xios --arch 'your-compiler' --jobs 8
+~~~
+
+### Download and compile NEM0
+Documentation: <https://forge.ipsl.jussieu.fr/nemo/wiki/Users/ModelInstall> 
+
+~~~sh
+svn --username 'mylogin' co http://forge.ipsl.jussieu.fr/nemo/svn/branches/2017/dev_merge_2017
+
+cd dev_merge_2017/NEMOGCM/CONFIG
+./makenemo –m 'your-compiler' –n ORCA2_SAS_LIM3 -j 4
+~~~
+
+### Run ORCA2\_SAS\_LIM3
+Go the exec directory:
+
+~~~sh
+cd ORCA2_SAS_LIM3/EXP00
+~~~
+
+Get the input files for atmospheric forcing here: [link] (<http://prodn.idris.fr/thredds/catalog/ipsl_public/romr005/Online_forcing_archives/catalog.html?dataset=DatasetScanipsl_public/romr005/Online_forcing_archives/ORCA2_LIM_nemo_v3.7.tar>)  
+
+Get the input files for oceanic forcing (surface velocity, sst, sss & ssh) here: [link] (<http://prodn.idris.fr/thredds/catalog/ipsl_public/romr005/Online_forcing_archives/catalog.html?dataset=DatasetScanipsl_public/romr005/Online_forcing_archives/INPUTS_SAS_v3.5.tar>)  
 
 
-You can see how to extract the code nemo  here: 
-https://forge.ipsl.jussieu.fr/nemo/wiki/Users/ModelInstall: 
+Run the simulation:  
 
-### Extract the code NEMO via svn :
-svn --username 'mylogin' co http://forge.ipsl.jussieu.fr/nemo/svn/branches/2015/nemo_v3_6_STABLE/NEMOGCM
+~~~sh
+poe ./opa -procs 32
+~~~
 
-### Compile NEMO :
+### How to change your simulation set up  
 
-Compile ORCA2_SAS_LIM3 directory:
+* You can change your simulation length etc in namelist\_cfg  
 
-cd NEMOGCM/CONFIG
+~~~fortran
+!-----------------------------------------------------------------------
+&namrun        !   parameters of the run
+!-----------------------------------------------------------------------
+   nn_it000    =       1   !  first time step
+   nn_itend    =    5475   !  last  time step (std 5475)
+~~~
 
-./makenemo –m 'my_arch' –n ORCA2\_SAS\_LIM3 
+* You can change the ocean fields used to force the ice from below  
 
-### Input necessary files :
-Input files necessary for ORCA2_SAS_LIM3 are:
+You can either read an ocean state
 
-[INPUTS_SAS_v3.5.tar](http://prodn.idris.fr/thredds/catalog/ipsl_public/romr005/Online_forcing_archives/catalog.html?dataset=DatasetScanipsl_public/romr005/Online_forcing_archives/INPUTS_SAS_v3.5.tar)
+~~~fortran
+!-----------------------------------------------------------------------
+&namsbc_sas    !   Stand-Alone Surface boundary condition
+!-----------------------------------------------------------------------
+   l_sasread   = .true.    !  =T Read the above fields in a file, =F initialize to 0. in sbcssm.F90
+~~~
 
-and 
+Or have constant values defined in SAS_SRC/sbcssm.F90
 
-[ORCA2_LIM_nemo_v3.7.tar](http://prodn.idris.fr/thredds/catalog/ipsl_public/romr005/Online_forcing_archives/catalog.html?dataset=DatasetScanipsl_public/romr005/Online_forcing_archives/ORCA2_LIM_nemo_v3.6.tar)
+~~~fortran
+   l_sasread   = .false.    !  =T Read the above fields in a file, =F initialize to 0. in sbcssm.F90
+~~~
+
+* You can change the atm. fields used to force the ice from above
+
+~~~fortran
+!-----------------------------------------------------------------------
+&namsbc_blk   !   namsbc_blk  generic Bulk formula                      (ln_blk =T)
+!-----------------------------------------------------------------------
+~~~
+
+* You can change your simulation ice parameters in namelist\_ice\_cfg  
+
+~~~fortran
+!------------------------------------------------------------------------------
+&nampar         !   Generic parameters
+!------------------------------------------------------------------------------
+   jpl              =   5             !  number of ice  categories
+~~~
+
+_Note: The namelists read by the code are the reference namelists "namelist\_ref" overwritten by the configuration namelists "namelist\_cfg"_
+
+* You can change your outputs in file\_def\_nemo-lim.xml  
+
+~~~xml
+<file_group id="5d" output_freq="5d"  output_level="10" enabled=".TRUE.">  <!-- 5d files -->
+   <file id="file21" name_suffix="_icemod" description="ice variables" enabled=".true." >
+      <field field_ref="icethic"          name="sithic" />
+   </file>
+</file_group>
+~~~
