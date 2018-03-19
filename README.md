@@ -30,9 +30,9 @@ Go the exec directory:
 cd ORCA2_SAS_LIM3/EXP00
 ~~~
 
-Get the input files for atmospheric forcing [here] (<http://prodn.idris.fr/thredds/catalog/ipsl_public/romr005/Online_forcing_archives/catalog.html?dataset=DatasetScanipsl_public/romr005/Online_forcing_archives/ORCA2_LIM_nemo_v3.7.tar>)
+Get the input files for atmospheric forcing [here](http://prodn.idris.fr/thredds/catalog/ipsl_public/romr005/Online_forcing_archives/catalog.html?dataset=DatasetScanipsl_public/romr005/Online_forcing_archives/ORCA2_LIM_nemo_v3.7.tar)
 
-Get the input files for oceanic forcing (surface velocity, sst, sss & ssh) here: [link] (<http://prodn.idris.fr/thredds/catalog/ipsl_public/romr005/Online_forcing_archives/catalog.html?dataset=DatasetScanipsl_public/romr005/Online_forcing_archives/INPUTS_SAS_v3.5.tar>)  
+Get the input files for oceanic forcing (surface velocity, sst, sss & ssh) [here](http://prodn.idris.fr/thredds/catalog/ipsl_public/romr005/Online_forcing_archives/catalog.html?dataset=DatasetScanipsl_public/romr005/Online_forcing_archives/INPUTS_SAS_v3.5.tar)
 
 
 Run the simulation:  
